@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+</head>
+<body>
+<h1>Component Life Cycle</h1>
+<div id="app"></div>
+
+<script type="text/babel">
+    // 1. what is l.c
+    //  - component -> life cycle -> mount, update, unmount
+    // 2. Mounting
+    //  - constructor, render, componentDidMount
+
+    // class App extends React.Component {
+    //     constructor() {
+    //         super();
+    //         this.state = {
+    //             isShow: false,
+    //             a: 100
+    //         }
+    //     }
+    //
+    //     onShow = () => {
+    //         // set isSHOW
+    //         this.setState( pre => {
+    //             return {
+    //                 isShow: !pre.isShow
+    //             }
+    //         })
+    //     }
+    //
+    //     render() {
+    //         const { isShow, a } = this.state;
+    //         return (
+    //             <div>
+    //                 <p>this is Parent Component</p>
+    //                 <p>My num is: { a }</p>
+    //                 <div>
+    //                     <button onClick={ this.onShow }>show / hide</button>
+    //                 </div>
+    //                 <br/>
+    //                 <div>
+    //                     <button onClick={ () => {
+    //                         this.setState( { a: this.state.a + 10 } )
+    //                     }}>change a</button>
+    //                 </div>
+    //                 <hr/>
+    //                 {
+    //                     isShow ? <Child num={ a }/> : null
+    //                 }
+    //             </div>
+    //         )
+    //     }
+    // }
+    // class Child extends React.Component {
+    //     constructor() {
+    //         super();
+    //         this.state = {
+    //             data : 888
+    //         }
+    //         console.log('1. constructor');
+    //     }
+    //
+    //     componentDidMount() {
+    //         console.log('3. componentDidMount')
+    //         const oP = document.getElementsByClassName('haha')[0];
+    //         console.log(oP); // ?
+    //     }
+    //
+    //     componentDidUpdate(preProps, preState) {
+    //         console.log('4. componentDidUpdate');
+    //         console.log('preProps -> ', preProps);
+    //         console.log('preState -> ', preState);
+    //
+    //         // this.setState ?
+    //         if(preState.data === 868) {
+    //             this.setState({
+    //                 data: "haha"
+    //             })
+    //         }
+    //     }
+    //
+    //     componentWillUnmount() {
+    //         console.log('5. componentWillUnmount')
+    //     }
+    //
+    //     render() {
+    //         console.log('2. render ');
+    //         console.log('props -> ', this.props)
+    //         return(
+    //             <div>
+    //                 <p className="haha">this is Child Component</p>
+    //                 <p>number from Parent: { this.props.num }</p>
+    //                 <p>data is from child itself: { this.state.data }</p>
+    //                 <div>
+    //                     <button onClick={ () => {
+    //                         this.setState({
+    //                             data: this.state.data - 10
+    //                         })
+    //                     }}>click me</button>
+    //                 </div>
+    //             </div>
+    //         )
+    //     }
+    // }
+
+    class Clock extends React.Component {
+        constructor() {
+            super();
+            this.state = {
+                now: new Date().toString()
+            }
+        }
+
+        render() {
+            return (
+                <div>
+                    <h3>This is a clock</h3>
+                    <h4>Now: { this.state.now }</h4>
+                </div>
+            )
+        }
+
+        componentDidMount() {
+            console.log('componentDidMount')
+            this.t = setInterval(() => {
+                this.setState({
+                    now: new Date().toString()
+                })
+            }, 1000)
+        }
+
+        componentDidUpdate() {
+            console.log('componentDidUpdate')
+        }
+
+        componentWillUnmount() {
+            console.log('componentWillUnmount')
+            clearInterval(this.t);
+            this.t = null;
+        }
+
+        // setInterval? didUpdate? didMount?
+    }
+
+    ReactDOM.render(
+        <Clock />,
+        document.getElementById('app')
+    );
+
+    setTimeout(() => {
+        console.log(1)
+        ReactDOM.unmountComponentAtNode(document.getElementById('app'))
+    }, 5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--        <meta charset="UTF-8">-->
+<!--        <title>Title</title>-->
+<!--        <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script> //window will include react & reactDOM-->
+<!--        <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>-->
+<!--        <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>State + Event + Data Communication</h1>-->
+<!--<div id="app">-->
+<!--    <script type="text/babel">-->
+<!--    // props 是个外部的只读数据，不能在组建里修改 -&#45;&#45;》state-->
+<!--    // 2- how to use-->
+<!--        // - define： 1，inside constructor（需要加上this，出constructor还可用）-->
+<!--        //           2 out of constructor-->
+<!--        // - write-->
+<!--    // 3. react event-->
+<!--    //-->
+
+<!--    class App extends React.Component{-->
+<!--        constructor() {-->
+<!--            super();-->
+<!--            // this.state = {-->
+<!--            //     a : 1-->
+<!--            // }-->
+<!--        }-->
+<!--        state = {-->
+<!--            a : 1,-->
+<!--            b : 10 // needs to be key value pair-->
+<!--        }-->
+<!--        render(){-->
+<!--            return(-->
+<!--                <div>-->
+<!--                   <p> the data is : {this.props.num}</p>-->
+
+<!--                </div>-->
+<!--            )-->
+<!--        }-->
+<!--    }-->
+
+//---------------------------//
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+        }
+    </style>
+<body>
+<h1>State + Event + Data Communication</h1>
+<!--<h2>hello react</h2>-->
+<!--<button class="btn">click me</button>-->
+<!--<div class="box"></div>-->
+<hr />
+<div id="app"></div>
+
+<script type="text/javascript">
+    // let oBox = document.getElementsByClassName('box')[0],
+    //     oBtn = document.getElementsByClassName('btn')[0];
+    //
+    // let val = 100;
+    // oBtn.onclick = function() {
+    //     // change val
+    //     val += 20;
+    //     // view <-> data(val)
+    //     oBox.style.height = val + 'px';
+    //     oBox.style.width = val + 'px';
+    // }
+    // get button
+    // const oBtn = document.getElementsByClassName('btn')[0];
+    // let oH2 = document.getElementsByTagName('h2')[0];
+    // oBtn.onclick = function () {
+    //     oH2.style.backgroundColor = "red";
+    // }
+    //oBtn.addEventListener('click', function(){})
+</script>
+
+<script type="text/babel">
+    // 1. what is state?
+    //  - props vs component ?
+    // 2. how to use?
+    //  - define
+    //      - this.state = {}
+    //  - write
+    //      - setState()
+    //          - {}
+    //          - () => {} // use 回调函数可以确保运行顺序,如果有相关联数据必须用回调函数
+    // 3. react event
+    //  - jsx <button onClick={ this.doSthFn }></button>
+
+    class App extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                a: 1,
+                b: 1,
+                // data
+                w: 100,
+                h: 100,
+                outerData: props.num
+            }
+            // this.change = this.change.bind(this);
+        }
+
+        // state = {
+        //     a: 1,
+        //     b: 10
+        // }
+
+        change = () => {
+            console.log(1);
+            console.log(this);
+            this.setState({
+                outerData: "haha"
+            })
+            // this.setState({ a: this.state.a + 10 });
+            // this.setState({ b: `current a is: ${this.state.a}`})
+            this.setState(preState => {
+                console.log('1 -> ',preState);
+                return {
+                    a: preState.a + 10,
+                }
+            })
+
+            this.setState(preState => {
+                console.log('2 -> ',preState);
+                return {
+                    b: `current a is: ${preState.a}`
+                }
+            })
+        }
+
+        render() {
+            console.log(this.state);
+            const { w, h, b, outerData } = this.state;
+            return (
+                <div>
+                    <p>the data is : { outerData }</p>
+                    <p>the internal data: { this.state.a }</p>
+                    <p>the internal b: { b }</p>
+                    <div
+                        style={{
+                            width: w,
+                            height: h,
+                            backgroundColor: "#ccc"
+                        }}></div>
+                    <button onClick={
+                        () => {
+                            // this.state.a += 10;
+                            // this.setState({
+                            //     a: "haha"
+                            // })
+                            this.setState(preState => {
+                                console.log(`preState: ${preState}`);
+                                // return new state
+                                return {
+                                    w: preState.w + 10,
+                                    h: preState.h + 10
+                                }
+                            })
+                        }
+                    }>click me + 10 </button>
+
+                    <br />
+                    <button onClick={ this.change }>click me</button>
+                    {
+                        // <button onClick={
+                        //     () => {
+                        //         console.log('clicked')
+                        //         this.props.num = 100;
+                        //     }
+                        // }>click me -> 100</button>
+                    }
+                </div>
+
+            )
+        }
+    }
+
+
+    ReactDOM.render(
+        <App num={10}/>,
+        document.getElementById('app')
+    )
+</script>
+</body>
+</html>

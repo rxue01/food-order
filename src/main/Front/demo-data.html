@@ -1,0 +1,115 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+</head>
+<body>
+<h1>Data Communication</h1>
+<div id="app"></div>
+<script type="text/babel">
+    // 1. parent -> child
+    //  - step1: in P comp, <C key={value}>
+    //  - step2: in C comp, (this.)props.key
+
+    // 2. child -> parent //
+    // - step 1： in P com, <C key = {fn}/>
+    // - step 2: in P com, define fn
+    // - step 3: in C com, this props.key(data) => data => P
+
+    // 3. sibling --> sibling
+    // - no relation
+    // - LCA
+    class Parent extends React.Component {
+        state = {
+            num: 20,
+            str: "hello from your parent",
+            obj: { name: "haha", age: 10 }
+        }
+
+        render() {
+            return (
+                <div>
+                    <h3>This is Parent</h3>
+                    <p>My own data is: { this.state.num }</p>
+                    <hr/>
+                    <Child dataFromP={ this.state.num } // 通过props传参
+                           strFromP={ this.state.str }
+                            // onChangeStateFn -> changeMyState reference
+                           onChangeStateFn={ this.changeMyState } // ---> function reference
+                    />
+                </div>
+            )
+        }
+
+        changeMyState = (val) => {
+            console.log('change...', val);
+            //change state
+            // 两种方法，对象{} and 回调函数 reason 如果修改的值和之前的值有关系，用回调函数保证一致性， 因为是箭头函数， keep this
+            this.setState(preState => { // parent改了parent的值，用的child传入的参数
+                return{
+                    num: preState.num + val
+                }
+            }
+
+
+            );
+        }// 运行之后会rerender， 所以child得到了parent的新数据
+    }
+
+    class Child extends React.Component {
+        render() {
+            return (
+                <div>
+                    <h4>This is Child</h4>
+                    <p>Data from Parent is: { this.props.dataFromP }</p>
+                    <p>Greeting: { this.props.strFromP }</p>
+                    <p>
+                        <button onClick={ this.onChange }>click me</button>
+                    </p>
+                </div>
+            )
+        }
+
+        onChange = () => {
+            console.log('clicked!');
+            // why not? props -> ready-only
+            // this.props.num =+ 10;
+            console.log(this.props.onChangeStateFn) // ? 父类函数的reference，可访问到父类里的函数
+            this.props.onChangeStateFn();
+        }
+    }
+
+    class GrandChild extends React.component{
+        render(){
+            return(
+                <div>
+                <h3> This is
+                </div>
+            )
+        }
+    }
+
+
+    ReactDOM.render(
+        <Parent />,
+        document.getElementById('app')
+    )
+    // from parent to child: single way data flow
+</script>
+</body>
+</html>

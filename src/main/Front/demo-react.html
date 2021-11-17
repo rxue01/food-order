@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script> //window will include react & reactDOM
+    <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <script type="text/babel">
+    // react 核心库：创建UI的API
+    // reactDOM：通过rander将react创建的虚拟DOM 对接到 HTML的真实DOM
+    // how to install react
+    // - React -> react core, provides app APIS
+    // - ReactDOM -> virtual dom <-> dom
+    // - babel -> compile jsx
+    // DOM is offered by browser it has APIs
+    // virtual dom: 模拟的dom，由JS模拟真实dom创建（先模拟虚拟element，再组合）
+    // why virtual dom？：高效 reasons：
+    // 虚拟dom的div算法？？
+    // JSX --》替代 create element，更精简（但是本质还是create element）
+    // JSX：HTML + JS: 在JS里用HTML标签
+    // 4 component
+
+
+        //
+    // const ele1 = <div className = "box"> this is a box</div>;// if we use jsx syntex, we need that babel
+    // // 有了虚拟dom，要挂在真实dom
+    // ReactDOM.render(
+    //     ele1,
+    //     document
+    // )
+
+    // const a = 10;
+    //
+    // const ele = <div>
+    //     a: {a} // if we dont use{},
+    //             //a can not be present as 10, this can be integer, string, not boolean or obj(need to transform to string)
+    //             //{varible}
+    //     </div>
+    // ReactDOM.render(
+    //     ele1,
+    //     document.getElementById('app')
+    //  )
+    // 最小单位是element，多个elements组成components
+    //component method1
+    function  Hello(props) {
+        console.log(props.name);
+
+        // return "<div>this is a div</div> "; // ----> 普通函数，函数名小写
+        return <div>
+            this is a div
+            <br/>
+            name:{props.name}// call in fumction
+        </div>;// ---》component， 返回jsx，名字大写成为Hello组建
+     }
+        ReactDOM.render(
+            <Hello name = {'Joe'} age = {10}/>,// == Hello('Joe'), use key value pair to seperate fields
+            document.getElementById('app')
+        )
+    }
+
+    // component class：继承 React.Component, constructor need to have a super
+    // need a render to return jsx
+
+    class Hello extends React.Component{
+        constructor(props) {
+            super(props);
+            console.log(props);
+        }
+        render(){
+            console.log(this.props); // this---> class
+            const {name, age} = this.props;
+            return <div>
+                this XXX
+                <br />
+                name: {name}
+                <br />
+                age:{age}
+            </div>// must have !
+        }
+    }
+    ReactDOM.render(
+        <Hello name = {'Joe'} age = {10}/>,// == Hello('Joe'), use key value pair to seperate fields
+        document.getElementById('app')
+    )
+    }
+    // componant pass value: use Props
+
+
+
+    </script>
+
+</head>
+<body>
+
+</body>
+</html>

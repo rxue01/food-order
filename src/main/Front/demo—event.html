@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    div {
+      width: 100px;
+      height: 100px;
+      background-color: lightblue;
+    }
+  </style>
+</head>
+<body>
+<h1>DOM + Event + Ajax</h1>
+<!--<div class="user common">Users:</div>-->
+<!--<ul class="box common">-->
+<!--    <li id="john" class="item">John</li>-->
+<!--    <li id="peter">Peter</li>-->
+<!--</ul>-->
+<!--<ol id="ol">-->
+<!--    <li>0</li>-->
+<!--    <li>1</li>-->
+<!--    <li>2</li>-->
+<!--&lt;!&ndash;    <li>3</li>&ndash;&gt;-->
+<!--</ol>-->
+
+<!--<ul class="container"></ul>-->
+
+<div class="box"></div>
+
+<script>
+  // 1. document.getElement(s)by apis
+  // var oJohn = document.getElementById('john');
+  // // console.log(oJohn);
+  // var oCommon = document.getElementsByClassName('common');
+  // var oUser = document.getElementsByClassName('user')[0]; // ?
+  // var oUser = document.getElementsByClassName('user')[0]; // ?
+  // var oUl = oCommon[1];
+  // var oJohn1 = oUl.getElementsByClassName('item')[0];
+  // var oLis = document.getElementsByTagName('li');
+  // var oLis1 = oUl.getElementsByTagName('li');
+
+  // 2. document.querySelector
+  // var oUser1 = document.querySelector('.user');
+  // var oJohn2 = document.querySelector('.common .item');
+  // var oCommon1 = document.querySelectorAll('.common');
+
+  // 3. create element
+  // step1: create li
+  // var oLi = document.createElement('li');
+  // step2: add context
+  // oLi.innerHTML = '<strong>3</strong>';
+  // step3: render oLi to dom
+  // var oOl = document.getElementById('ol');
+  // oOl.append(oLi);
+  // oOl.prepend(oLi);
+  // oOl.after(oLi);
+
+  // 4. practice
+  // var arr = ['cherry', 'pear', 'grape'];
+  // // step1: find where to mount arr data
+  // // step2: for each fruit, create a li element
+  // // step3: append each li to ul
+  // var oUl = document.getElementsByClassName('container')[0];
+  // var str = "";
+  // for(var i = 0; i < arr.length; i++) {
+  //     // method1
+  //     // var oLi = document.createElement('li');
+  //     // oLi.innerHTML = arr[i];
+  //     // oUl.append(oLi);
+  //
+  //     // method2
+  //     str += '<li>' + arr[i] + '</li>';
+  // }
+  // oUl.innerHTML = str;
+
+  // 5. event
+  //  - what is an event
+  // var oDiv = document.getElementsByClassName('box')[0];
+  // oDiv.onclick = function(eventObject) {
+  //     console.log(eventObject);
+  //     console.log(1);
+  //     oDiv.style.backgroundColor = 'pink';
+  // }
+  // console.log(2);
+  // oDiv.onclick = function() {
+  //     console.log(3);
+  //     oDiv.style.backgroundColor = 'orange';
+  // }
+  // var obj = {a: 1};
+  // oDiv.addEventListener('click', function(e) {
+  //     console.log(e);
+  //     console.log(obj);
+  //     console.log(1);
+  // }, false);
+  //
+  // oDiv.addEventListener('click', function() {
+  //     console.log(2);
+  // }, false);
+  //
+
+  // 6. Ajax
+  // step1: create XMLHttpRequest
+  var xhr = new XMLHttpRequest();
+  // step2: init xhr -> url method
+  xhr.open('GET', 'https://petstore.swagger.io/v2/swagger.json', true);
+  // step3: send
+  xhr.send();
+  // step4: listen
+  xhr.onload = function() {
+    // check response status
+    console.log(xhr)
+    if(xhr.status === 200){
+      // convert text to object
+      var res = JSON.parse(xhr.responseText);
+      console.log(res);
+    }
+  }
+
+  xhr.onerror = function() {
+    console.log('error')
+  }
+
+  function ajax(method, url, data, sucCb, errCb) {
+    var xhr = new XMLHttpRequest();
+    // step2: init xhr -> url method
+    xhr.open(method, url, true);
+    // step3: send
+    if(data === null) {
+      xhr.send();
+    } else {
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(data);
+    }
+
+    // step4: listen
+    xhr.onload = function() {
+      // check response status
+      if(xhr.status === 200){
+        // convert text to object
+        var res = JSON.parse(xhr.responseText);
+        sucCb(res); // revoke
+      }
+    }
+
+    xhr.onerror = function() {
+      console.log('error')
+      errCb('error')
+    }
+  }
+
+  // define
+  function sCb(result) {
+    console.log(result)
+  }
+
+  function eCb() {
+
+  }
+  ajax('GET', 'https://petstore.swagger.io/v2/swagger.json', null, sCb, eCb);
+
+  ajax('GET', 'https://petstore.swagger.io/v2/swagger.json', null, function (result) {
+    console.log(result)
+  }, eCb);
+</script>
+</body>
+</html>
